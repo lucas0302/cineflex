@@ -1,12 +1,18 @@
-import { SessionContainer, ButtonsContainer} from "./styled";
+import { Link } from "react-router-dom";
+import { SessionContainer, ButtonsContainer } from "./styled";
 
-export default function SessionCard() {
+export default function SessionCard({ session }) {
+    const { weekday, date, showtimes } = session
     return (
         <SessionContainer>
-            Sexta - 03/03/2023
+            {weekday} - {date}
             <ButtonsContainer>
-                <button>14:00</button>
-                <button>15:00</button>
+                {showtimes.map((time) => (
+                    <Link to={`/assentos/${time.id}`} key={time.id}>
+                        <button>{time.name}</button>
+                    </Link>
+                ))}
+
             </ButtonsContainer>
         </SessionContainer>
 
