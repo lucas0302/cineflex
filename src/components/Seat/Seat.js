@@ -1,7 +1,8 @@
 import { SeatItem } from "./styled";
 
-export default function Seat() {
+export default function Seat({seat}) {
+    const {id, isAvailable , name} = seat
     return (
-        <SeatItem>01</SeatItem>
+        <SeatItem>{seat.name}</SeatItem>
     )
 }

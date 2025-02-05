@@ -8,7 +8,7 @@ export default function Footer({posterURL, title, weekday, hour}) {
             </div>
             <div>
                 <p>{title}</p>
-                {/* {weekday && hour && <p>{weekday} - {hour}</p>} */}
+                {weekday && hour && <p>{weekday} - {hour}</p>}
             </div>
         </FooterContainer>
     )
