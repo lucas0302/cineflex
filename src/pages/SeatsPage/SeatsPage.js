@@ -8,7 +8,7 @@ import { BASE_URL } from "../../constants/urls";
 import Caption from "./Caption";
 import BayerForm from "./BayerForm";
 
-export default function SeatsPage() {
+export default function SeatsPage({ setSuccessInfo }) {
     const { idSessao } = useParams();
     const [session, setSession] = useState(undefined);
     const [selectedSeats, setSelectedSeats] = useState([]);
@@ -55,7 +55,11 @@ export default function SeatsPage() {
             </SeatsContainer>
 
             <Caption />
-            <BayerForm />
+            <BayerForm 
+            selectedSeats={selectedSeats}
+            setSuccessInfo={setSuccessInfo}
+            session={session}
+            />
 
             {session.movie && (
                 <Footer
