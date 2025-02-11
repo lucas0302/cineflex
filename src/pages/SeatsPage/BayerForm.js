@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormContainer } from "./styled";
 import axios from "axios";
 import { BASE_URL } from "../../constants/urls";
 import { useNavigate } from "react-router-dom";
+import MaskedInput from "react-text-mask"; 
+
 export default function BayerForm({ selectedSeats, setSuccessInfo, session }) {
     const [form, setForm] = useState({ name: "", cpf: "" });
     const [disableButton, setDisableButton] = useState(true);
@@ -15,37 +17,37 @@ export default function BayerForm({ selectedSeats, setSuccessInfo, session }) {
         } else {
             setDisableButton(true);
         }
-
-    }, [selectedSeats, form])
+    }, [selectedSeats, form]);
 
     function handleForm(e) {
-        const { name, value } = e.target
-        setForm({ ...form, [name]: value })
+        const { name, value } = e.target;
+        setForm({ ...form, [name]: value });
     }
 
     function BuyTicket(e) {
         e.preventDefault();
 
         const ids = selectedSeats.map((s) => s.id);
-        const body = { ...form, ids }
-        axios.post(`${BASE_URL}/seats/book-many`, body)
-            .then(res => {
-
+        const body = { ...form, ids };
+        axios
+            .post(`${BASE_URL}/seats/book-many`, body)
+            .then((res) => {
                 const info = {
                     movie: session.movie.title,
                     data: session.day.date,
                     hour: session.name,
                     buyer: form.name,
                     cpf: form.cpf,
-                    seats: selectedSeats.map((s) => s.name)
-                }
+                    seats: selectedSeats.map((s) => s.name),
+                };
 
                 setSuccessInfo(info);
-                navigate("/sucesso")
+                navigate("/sucesso");
             })
-            .catch(err => {
-                alert(err.response.data.message)
-            })
+            .catch((err) => {
+                const errorMessage = err?.response?.data?.message || "Ocorreu um erro inesperado!";
+                alert(errorMessage);
+            });
     }
 
     return (
@@ -61,8 +63,9 @@ export default function BayerForm({ selectedSeats, setSuccessInfo, session }) {
             />
 
             <label htmlFor="cpf"> CPF do Comprador:</label>
-            <input
+            <MaskedInput
                 id="cpf"
+                mask={[/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]}
                 placeholder="Digite seu CPF..."
                 name="cpf"
                 value={form.cpf}
@@ -70,7 +73,9 @@ export default function BayerForm({ selectedSeats, setSuccessInfo, session }) {
                 required
             />
 
-            <button type="submit" disabled={disableButton}>Reservar Assento(s)</button>
+            <button type="submit" disabled={disableButton}>
+                Reservar Assento(s)
+            </button>
         </FormContainer>
     );
 }
